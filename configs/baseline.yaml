@@ -1,0 +1,137 @@
+universe:
+  sectors:
+    energy:
+      - XOM
+      - CVX
+      - COP
+      - MPC
+      - VLO
+      - PSX
+      - SLB
+      - HAL
+      - DVN
+      - EOG
+    financials:
+      - JPM
+      - BAC
+      - WFC
+      - C
+      - USB
+      - PNC
+      - TFC
+      - CFG
+      - KEY
+      - RF
+    technology:
+      - MSFT
+      - AAPL
+      - GOOGL
+      - META
+      - NVDA
+      - AMD
+      - INTC
+      - QCOM
+      - TXN
+      - MU
+    healthcare:
+      - JNJ
+      - PFE
+      - MRK
+      - ABBV
+      - BMY
+      - LLY
+      - AMGN
+      - GILD
+      - BIIB
+      - REGN
+    consumer_staples:
+      - PG
+      - KO
+      - PEP
+      - WMT
+      - COST
+      - PM
+      - MO
+      - CL
+      - KMB
+      - SYY
+    industrials:
+      - GE
+      - HON
+      - MMM
+      - CAT
+      - DE
+      - BA
+      - LMT
+      - RTX
+      - NOC
+      - GD
+    materials:
+      - LIN
+      - APD
+      - SHW
+      - ECL
+      - NEM
+      - FCX
+      - NUE
+      - VMC
+      - MLM
+      - CF
+    utilities:
+      - NEE
+      - DUK
+      - SO
+      - AEP
+      - EXC
+      - SRE
+      - XEL
+      - WEC
+      - ES
+      - ETR
+
+data:
+  start: "2010-01-01"
+  end: "2023-12-31"
+  cache_dir: "data/cache"
+  source: "yfinance"
+  data_hash_log: "data/cache/run_hashes.log"
+
+strategy:
+  max_pairs: 10
+  min_correlation: 0.80
+  coint_pvalue: 0.05
+  min_half_life: 2
+  max_half_life: 60
+  entry_threshold: 2.0
+  exit_threshold: 0.5
+  stop_threshold: 3.5
+  zscore_window_multiplier: 1.0   # rolling window = multiplier * half_life
+  hedge_ratio: "kalman"           # "ols" or "kalman"
+  kalman_delta: 1.0e-4
+  kalman_obs_noise: 1.0e-2
+
+frictions:
+  commission_per_share: 0.005
+  commission_min_dollars: 1.0
+  spread_bps: 5.0
+  slippage_bps: 5.0
+  borrow_annual_rate: 0.01        # 1% annualized short borrow
+  gross_exposure_cap: 2.0         # max (long + short) as multiple of equity
+  per_pair_notional_fraction: 0.10  # each pair gets ≤ 10% of equity per leg
+
+portfolio:
+  initial_capital: 1000000.0
+  random_seed: 42
+
+benchmark:
+  ticker: "SPY"
+
+walk_forward:
+  formation_days: 504    # ~2 years
+  trading_days: 126      # ~6 months
+  step_days: 126
+
+sensitivity:
+  commission_multipliers: [0.5, 1.0, 1.5, 2.0]
+  slippage_multipliers: [0.5, 1.0, 1.5, 2.0, 3.0]
+  borrow_multipliers: [0.5, 1.0, 2.0, 3.0]
