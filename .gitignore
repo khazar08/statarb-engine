@@ -1,0 +1,12 @@
+data/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
+*.parquet
+*.log
+.DS_Store
+notebooks/.ipynb_checkpoints/
