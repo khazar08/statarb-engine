@@ -2,7 +2,7 @@
 
 An event-driven backtesting framework for cointegration-based pairs trading on US equities.
 
-The point of this project is **not** "I found a profitable strategy."  The point is an honest backtesting *system* — one that structurally prevents lookahead, charges every realistic friction, and reports performance only after correcting for multiple testing.  A Sharpe ratio that survives walk-forward analysis and Deflated Sharpe correction is worth more than a Sharpe of 3.4 on an in-sample curve.
+The point of this project is **not** "I found a profitable strategy."  The point is an honest backtesting system that structurally prevents lookahead, charges every realistic friction, and reports performance only after correcting for multiple testing.  A Sharpe ratio that survives walk-forward analysis and Deflated Sharpe correction is worth more than a Sharpe of 3.4 on an in-sample curve.
 
 ---
 
