@@ -1,11 +1,3 @@
-"""
-CLI entry point.
-
-    python -m statarb run --config configs/baseline.yaml
-    python -m statarb run --config configs/baseline.yaml --mode walk-forward
-    python -m statarb run --config configs/baseline.yaml --mode sensitivity
-"""
-
 import argparse
 import logging
 import random
