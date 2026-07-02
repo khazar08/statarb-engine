@@ -1,8 +1,3 @@
-"""
-Performance and risk metrics computed from a daily equity curve.
-All return-based metrics are dollar-return-based (not log).
-"""
-
 import numpy as np
 import pandas as pd
 from scipy import stats
