@@ -1,25 +1,6 @@
-"""
-Cost test: a zero-friction run must beat a positive-friction run by exactly
-the modelled cost on a hand-checked toy trade.
-
-We execute one BUY order for 100 shares at $50 (fill at mid).
-Frictions:
-  commission  = max(100 * 0.005, 1.0) = $0.50
-  spread_cost = 50 * (10/10000) / 2 * 100 = $2.50   (half-spread = 5 bps per share)
-  slippage    = 50 * (10/10000) * 100     = $5.00
-  borrow      = 0 (long leg)
-
-Total friction = $8.00.
-
-The zero-friction run ends with the full $5000 invested; the friction run
-ends with $5000 invested but $8.00 less cash — so equity is lower by $8.00.
-"""
-
 from datetime import date, timedelta
-
 import pandas as pd
 import pytest
-
 from statarb.data_handler import DataHandler
 from statarb.events import MarketEvent, OrderEvent, SignalEvent
 from statarb.portfolio import Portfolio
@@ -126,12 +107,6 @@ def _run(commission, spread_bps, slippage_bps):
 
 
 def test_zero_friction_beats_friction_by_exact_cost():
-    # hand-computed cost for 100 shares at $50 (no minimum commission):
-    #   commission  = 100 * 0.005              = 0.50
-    #   spread cost = 50 * (10/10000) / 2 * 100 = 2.50
-    #   slippage    = 50 * (10/10000) * 100     = 5.00
-    #   total                                  = 8.00
-
     equity_zero = _run(commission=0.0, spread_bps=0.0, slippage_bps=0.0)
     equity_full = _run(commission=0.005, spread_bps=10.0, slippage_bps=10.0)
 
@@ -145,7 +120,6 @@ def test_zero_friction_beats_friction_by_exact_cost():
 
 
 def test_borrow_cost_charged_on_short():
-    """A short position should accrue borrow; a long position should not."""
     handler_short = _make_handler(price=100.0, n=5)
     handler_long = _make_handler(price=100.0, n=5)
 
