@@ -1,16 +1,7 @@
-"""
-Accounting invariant: cash + mark-to-market(positions) == equity at every step.
-
-We run a small backtest and verify that portfolio.equity_curve[i]['equity']
-equals cash + sum(shares * price) at the corresponding date.
-"""
-
 from datetime import date, timedelta
-
 import numpy as np
 import pandas as pd
 import pytest
-
 from statarb.data_handler import DataHandler
 from statarb.events import MarketEvent, SignalEvent
 from statarb.portfolio import Portfolio
