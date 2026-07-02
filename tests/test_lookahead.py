@@ -1,32 +1,13 @@
-"""
-Lookahead test.
-
-Shifting all prices forward by one day and re-running the engine must
-produce a *different* (not better) P&L.  If the engine looked ahead,
-the shifted run would be identical to the original — it isn't because
-the strategy only ever sees latest_bars() which is capped at current_date.
-
-We use a toy synthetic dataset and a trivial strategy (always long the
-first ticker) so the test is fast and deterministic.
-"""
-
 import queue
 from datetime import date, timedelta
-
 import numpy as np
 import pandas as pd
 import pytest
-
 from statarb.data_handler import DataHandler
 from statarb.engine import BacktestEngine
 from statarb.events import MarketEvent, OrderEvent, FillEvent
 from statarb.portfolio import Portfolio
 from statarb.execution import ExecutionHandler
-
-
-# ------------------------------------------------------------------ #
-#  Minimal synthetic DataHandler
-# ------------------------------------------------------------------ #
 
 def _make_handler(prices: dict[str, list[float]], dates: list[date]) -> DataHandler:
     rows = []
@@ -47,14 +28,9 @@ def _make_handler(prices: dict[str, list[float]], dates: list[date]) -> DataHand
     return handler
 
 
-# ------------------------------------------------------------------ #
-#  Trivial strategy: buy ticker_a on day 1, never sell
-# ------------------------------------------------------------------ #
+
 
 class TrivialLongStrategy:
-    """Buy 100 shares on the first bar and hold. Uses OrderEvent directly so
-    the position is definitely taken and the equity curve depends on prices."""
-
     def __init__(self, ticker, data_handler):
         self.ticker = ticker
         self.data = data_handler
@@ -106,10 +82,6 @@ def _run_with_prices(prices, dates):
 
 
 def test_lookahead_not_possible():
-    """
-    Shifting prices by one day must change final equity.
-    If lookahead existed, final equity would be the same.
-    """
     n = 20
     dates = [date(2020, 1, 1) + timedelta(days=i) for i in range(n)]
     prices = [100.0 + i * 0.5 for i in range(n)]  # trending up
@@ -128,9 +100,6 @@ def test_lookahead_not_possible():
 
 
 def test_latest_bars_does_not_see_future():
-    """
-    latest_bars must never return data beyond current_date.
-    """
     n = 10
     dates = [date(2020, 1, 1) + timedelta(days=i) for i in range(n)]
     prices = list(range(100, 100 + n))
