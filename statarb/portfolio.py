@@ -27,8 +27,7 @@ class Portfolio:
         self.equity_curve: list[dict] = []       # [{date, equity, cash}, ...]
         self.trade_log: list[dict] = []
 
-    # ------------------------------------------------------------------ #
-
+    
     def update_timeindex(self, event: MarketEvent) -> None:
         """Mark-to-market and append to equity curve."""
         mtm = self._mark_to_market(event.timestamp)
