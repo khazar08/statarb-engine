@@ -14,15 +14,6 @@ logger = logging.getLogger(__name__)
 
 
 class DataHandler:
-    """
-    Lookahead-safe data access for the event-driven engine.
-
-    The key contract: `latest_bars` and any other per-ticker query only
-    return data at or before `self.current_date`.  The engine advances
-    `current_date` by iterating `stream()`, so the strategy physically
-    cannot observe future prices.
-    """
-
     def __init__(
         self,
         universe: list[str],
@@ -40,10 +31,6 @@ class DataHandler:
         self._data: pd.DataFrame | None = None   # MultiIndex (date, ticker)
         self._dates: pd.DatetimeIndex | None = None
         self._current_idx: int = -1
-
-    # ------------------------------------------------------------------ #
-    #  Public API
-    # ------------------------------------------------------------------ #
 
     def load(self) -> pd.DataFrame:
         self.cache_dir.mkdir(parents=True, exist_ok=True)
@@ -117,10 +104,6 @@ class DataHandler:
         )
         handler._current_idx = -1
         return handler
-
-    # ------------------------------------------------------------------ #
-    #  Private helpers
-    # ------------------------------------------------------------------ #
 
     def _download(self) -> pd.DataFrame:
         raw = yf.download(
