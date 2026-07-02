@@ -1,22 +1,8 @@
-"""
-Walk-forward analysis harness.
-
-For each rolling window:
-  1. Pair selection runs *only* on the formation slice (in-sample).
-  2. The strategy trades on the OOS slice with those frozen pairs.
-  3. OOS equity curves are stitched into a single continuous curve.
-
-The stitched OOS curve is the number you report.  In-sample curves are
-stored for diagnostics only.
-"""
-
 import logging
 from dataclasses import dataclass, field
 from datetime import date
-
 import numpy as np
 import pandas as pd
-
 from statarb.data_handler import DataHandler
 from statarb.engine import BacktestEngine
 from statarb.execution import ExecutionHandler
