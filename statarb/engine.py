@@ -5,14 +5,6 @@ logger = logging.getLogger(__name__)
 
 
 class BacktestEngine:
-    """
-    Single-threaded event loop.  Four event types flow in one direction:
-        MarketEvent -> SignalEvent -> OrderEvent -> FillEvent
-    No component can observe a future bar because MarketEvents are pushed
-    strictly in chronological order and the strategy only calls
-    data_handler.latest_bars(), which is capped at the current timestamp.
-    """
-
     def __init__(self, data_handler, strategy, portfolio, execution):
         self.data = data_handler
         self.strategy = strategy
