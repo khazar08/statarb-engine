@@ -1,16 +1,5 @@
-"""
-Pair selection pipeline (run in-sample only).
-
-Pipeline per sector:
-  1. Correlation pre-screen (> min_correlation)
-  2. Engle-Granger cointegration test (ADF p-value < coint_pvalue)
-  3. OU half-life filter (min_half_life <= hl <= max_half_life)
-  4. Rank by half-life, return top max_pairs across all sectors.
-"""
-
 import logging
 from dataclasses import dataclass
-
 import numpy as np
 import pandas as pd
 from statsmodels.regression.linear_model import OLS
@@ -47,7 +36,6 @@ def _log_prices(data: pd.DataFrame, ticker: str) -> pd.Series | None:
 
 
 def _ols_regression(log_y: pd.Series, log_x: pd.Series) -> tuple[float, float, pd.Series]:
-    """OLS of log_y on log_x. Returns (intercept, beta, residuals)."""
     X = add_constant(log_x.values)
     res = OLS(log_y.values, X).fit()
     intercept, beta = res.params
@@ -64,10 +52,6 @@ def _adf_pvalue(residuals: pd.Series) -> float:
 
 
 def compute_half_life(spread: pd.Series) -> float:
-    """
-    Fit AR(1): delta_s = lambda * s_{t-1} + mu + eps
-    Half-life = -ln(2) / lambda
-    """
     s = spread.dropna()
     delta_s = s.diff().dropna()
     s_lag = s.shift(1).dropna()
@@ -88,10 +72,6 @@ def select_pairs(
     sector_map: dict[str, list[str]],
     config: dict,
 ) -> list[PairSpec]:
-    """
-    Run the full selection pipeline on `data` (a formation-window slice).
-    Returns at most config['strategy']['max_pairs'] PairSpecs, sorted by half-life.
-    """
     s_cfg = config["strategy"]
     min_corr = s_cfg.get("min_correlation", 0.80)
     coint_pval = s_cfg.get("coint_pvalue", 0.05)
