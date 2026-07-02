@@ -1,13 +1,8 @@
-"""
-Tearsheet generator — produces a multi-panel figure and prints a summary table.
-"""
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.dates import DateFormatter
-
 from statarb.analytics.metrics import (
     compute_returns, cagr, sharpe, sortino, calmar,
     max_drawdown, market_beta, full_metrics,
