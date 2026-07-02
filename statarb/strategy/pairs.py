@@ -1,24 +1,8 @@
-"""
-PairsStrategy — event-driven z-score signal generator.
-
-For each active pair the strategy maintains:
-  - A rolling spread history (for z-score computation)
-  - A KalmanHedgeRatio instance (if hedge_ratio == "kalman")
-  - The current position state: FLAT, LONG_SPREAD, SHORT_SPREAD
-
-Signal conventions (from the portfolio's perspective):
-  direction="ENTRY"  ticker_long goes long,  ticker_short goes short
-  direction="EXIT"   flatten both legs
-  direction="STOP"   flatten both legs and deactivate pair until next window
-"""
-
 import logging
 from collections import deque
 from dataclasses import dataclass, field
 from datetime import date
-
 import numpy as np
-
 from statarb.events import MarketEvent, SignalEvent
 from statarb.strategy.kalman import KalmanHedgeRatio
 from statarb.strategy.pair_selection import PairSpec
@@ -38,15 +22,6 @@ class PairState:
 
 
 class PairsStrategy:
-    """
-    On each MarketEvent:
-      1. Fetch latest prices for all active pairs.
-      2. Update Kalman filter (or use static OLS beta).
-      3. Recompute spread and rolling z-score.
-      4. Apply entry / exit / stop rules.
-      5. Push SignalEvents into the shared event queue.
-    """
-
     def __init__(
         self,
         pairs: list[PairSpec],
