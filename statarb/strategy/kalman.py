@@ -2,20 +2,6 @@ import numpy as np
 
 
 class KalmanHedgeRatio:
-    """
-    Tracks a time-varying hedge ratio (and intercept) in the model:
-        log(P_y) = alpha_t + beta_t * log(P_x) + eps_obs
-
-    State vector: theta = [alpha, beta]^T
-    Transition:   theta_t = theta_{t-1} + w_t   (random walk)
-    Observation:  y_t = H_t @ theta_t + v_t
-
-    Process noise:    Q = delta/(1-delta) * I  (Var(w))
-    Observation noise: R  (Var(v))
-
-    Both Q and R are tunable via `delta` and `obs_noise`.
-    """
-
     def __init__(self, delta: float = 1e-4, obs_noise: float = 1e-2):
         if not (0 < delta < 1):
             raise ValueError("delta must be in (0, 1)")
