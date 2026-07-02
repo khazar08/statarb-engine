@@ -1,11 +1,3 @@
-"""
-Cost sensitivity analysis.
-
-Sweeps commission and slippage multipliers over a grid and reports how
-Sharpe and CAGR degrade as frictions increase.  A strategy whose edge
-vanishes at 2× costs has no margin of safety.
-"""
-
 import copy
 import logging
 from itertools import product
