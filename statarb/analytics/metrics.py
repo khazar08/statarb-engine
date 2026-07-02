@@ -101,9 +101,6 @@ def avg_win_loss_ratio(returns: pd.Series) -> float:
 
 
 def annualized_turnover(trade_log: pd.DataFrame, equity: pd.Series) -> float:
-    """
-    Rough annualized turnover: total notional traded / avg equity / n_years.
-    """
     if trade_log.empty or equity.empty:
         return 0.0
     notional_traded = (trade_log["quantity"] * trade_log["fill_price"]).sum()
