@@ -1,18 +1,5 @@
-"""
-Kalman filter tests.
-
-1. On a synthetic series with a known constant beta, the filter should
-   converge to that beta within a reasonable number of observations.
-
-2. A time-varying beta should be tracked: after a step change the filter
-   should converge to the new value.
-
-3. batch_filter must return arrays of the same length as the input.
-"""
-
 import numpy as np
 import pytest
-
 from statarb.strategy.kalman import KalmanHedgeRatio, batch_filter
 
 
@@ -42,11 +29,6 @@ def test_kalman_converges_to_known_beta():
 
 
 def test_kalman_tracks_step_change():
-    """After a step change in beta, the filter should re-converge.
-
-    Using step=0.05 for log_x so beta is well-identified (small x keeps beta
-    shrunk toward zero and makes convergence very slow).
-    """
     rng = np.random.default_rng(1)
     n = 400
     log_x = np.cumsum(rng.normal(0, 0.05, n))  # larger steps → β more identifiable
