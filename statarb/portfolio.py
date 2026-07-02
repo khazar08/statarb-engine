@@ -1,18 +1,6 @@
-"""
-Portfolio — the single source of truth for cash, positions, and equity.
-
-Sizing logic: dollar-neutral pairs.
-  - Each pair gets at most `per_pair_notional_fraction` of current equity per leg.
-  - Total gross exposure is capped at `gross_exposure_cap * equity`.
-  - Shares are computed so that the two legs have equal dollar notional
-    adjusted by the hedge ratio.
-"""
-
 import logging
 from datetime import date
-
 import pandas as pd
-
 from statarb.events import FillEvent, MarketEvent, OrderEvent, SignalEvent
 
 logger = logging.getLogger(__name__)
@@ -89,10 +77,6 @@ class Portfolio:
             "pair_id": event.pair_id,
         })
 
-    # ------------------------------------------------------------------ #
-    #  Daily borrow on open short positions
-    # ------------------------------------------------------------------ #
-
     def charge_daily_borrow(self) -> None:
         """Call once per bar after mark-to-market to accrue short-borrow fees."""
         annual_rate = self.config["frictions"]["borrow_annual_rate"]
@@ -105,10 +89,6 @@ class Portfolio:
                 price = float(price_data["adj_close"].iloc[-1])
                 borrow = abs(shares) * price * daily_rate
                 self.cash -= borrow
-
-    # ------------------------------------------------------------------ #
-    #  Internal helpers
-    # ------------------------------------------------------------------ #
 
     def _handle_entry(self, event: SignalEvent) -> None:
         if event.pair_id in self.open_pairs:
