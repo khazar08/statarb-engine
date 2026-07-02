@@ -1,17 +1,4 @@
-"""
-ExecutionHandler — applies all frictions and converts OrderEvents to FillEvents.
-
-Friction model (all configurable):
-  commission  : per-share fee with a per-trade minimum.
-  spread_cost : half-spread (crossing the bid-ask); approximated as bps of price.
-  slippage    : adverse fill vs. mid, also in bps.
-  borrow_cost : one-time borrow fee charged at the moment of shorting (annualized
-                rate prorated to expected holding; kept simple here as a flat
-                one-day charge since daily borrow is accrued in Portfolio).
-"""
-
 import logging
-
 from statarb.events import FillEvent, OrderEvent
 
 logger = logging.getLogger(__name__)
@@ -63,8 +50,6 @@ class ExecutionHandler:
             pair_id=event.pair_id,
         )
         self.events.put(fill)
-
-    # ------------------------------------------------------------------ #
 
     def _compute_commission(self, quantity: float, price: float) -> float:
         raw = quantity * self.commission_per_share
