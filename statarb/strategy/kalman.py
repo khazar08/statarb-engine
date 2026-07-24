@@ -12,22 +12,16 @@ class KalmanHedgeRatio:
         self._n_updates = 0
 
     def update(self, log_x: float, log_y: float) -> tuple[float, float]:
-        """
-        Incorporate one new (log_x, log_y) observation.
-        Returns updated (alpha, beta).
-        """
         H = np.array([1.0, log_x])  # observation row vector
 
         # predict
         P_pred = self.P + self.Q
 
-        # innovation
         v = log_y - H @ self.theta
 
         # innovation variance (scalar)
         S = H @ P_pred @ H + self.R
 
-        # Kalman gain (2-vector)
         K = (P_pred @ H) / S
 
         # state and covariance update
@@ -58,10 +52,6 @@ class KalmanHedgeRatio:
 def batch_filter(log_x: np.ndarray, log_y: np.ndarray,
                  delta: float = 1e-4, obs_noise: float = 1e-2
                  ) -> tuple[np.ndarray, np.ndarray]:
-    """
-    Run the Kalman filter over full arrays and return alpha, beta series.
-    Useful for in-sample pair selection diagnostics.
-    """
     kf = KalmanHedgeRatio(delta=delta, obs_noise=obs_noise)
     alphas = np.empty(len(log_x))
     betas = np.empty(len(log_x))
