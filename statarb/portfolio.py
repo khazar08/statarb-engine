@@ -91,7 +91,7 @@ class Portfolio:
 
     def _handle_entry(self, event: SignalEvent) -> None:
         if event.pair_id in self.open_pairs:
-            return  # already open
+            return
 
         equity = self._current_equity()
         target_notional = self.per_pair_frac * equity
