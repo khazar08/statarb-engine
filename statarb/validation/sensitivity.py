@@ -3,7 +3,6 @@ import logging
 from itertools import product
 import numpy as np
 import pandas as pd
-
 from statarb.analytics.metrics import full_metrics
 
 logger = logging.getLogger(__name__)
