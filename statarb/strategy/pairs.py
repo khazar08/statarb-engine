@@ -9,7 +9,6 @@ from statarb.strategy.pair_selection import PairSpec
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class PairState:
     spec: PairSpec
