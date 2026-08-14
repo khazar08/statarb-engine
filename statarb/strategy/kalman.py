@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class KalmanHedgeRatio:
     def __init__(self, delta: float = 1e-4, obs_noise: float = 1e-2):
         if not (0 < delta < 1):
